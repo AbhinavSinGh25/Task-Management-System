@@ -8,15 +8,6 @@ Important characteristics:
 3. User-Friendly design: Task management is made simple with an intuitive and user-friendly design, freeing users to concentrate on their work rather than complicated software.
 4. confidentiality and Access Control: The system uses basic access control and authentication procedures to guarantee data confidentiality and privacy.
 
-
-Key Features:
-
-1. Task Creation and Organization: Depending on their projects or individual needs, users may quickly create, classify, and prioritize tasks.
-2. Task Tracking: The system provides capabilities to monitor completion status, assign tasks, create deadlines, and track task progress.
-3. User-Friendly design: Task management is made simple with an intuitive and user-friendly design, freeing users to concentrate on their work rather than complicated software.
-4. confidentiality and Access Control: The system uses basic access control and authentication procedures to guarantee data confidentiality and privacy.
-5.Responsive Design: Designed with a responsive layout, the system adapts seamlessly to different devices, making it accessible from anywhere, anytime.
-
 Technologies Used:
 
 Frontend: HTML, CSS, JavaScript, Bootstrap
