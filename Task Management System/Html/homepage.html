@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Task Management System</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+    <link href="homepage.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet"> <!-- Font Awesome -->
+</head>
+
+<body>
+    <div class="container">
+        <h1 class="task-heading">Task Management System</h1>
+        <div class="add-task">
+            <a href="create-Task.html"><button class="add-task-btn"><i class="fas fa-plus-circle"></i> Add Task</button></a>
+            <button class="add-task-btn" onclick="toggleDeleteColumn()">Delete Task</button>
+        </div>
+        <div class="table-responsive">
+            <table class="table table-hover">
+                <thead>
+                    <tr>
+                        <th scope="col" id="deleteColumn" style="display: none;">Select</th>
+                        <th scope="col">Task ID</th>
+                        <th scope="col">Title</th>
+                        <th scope="col">Date Created</th>
+                        <th scope="col">Due Date</th>
+                        <th scope="col">Status</th>
+                    </tr>
+                </thead>
+                <tbody id="tasksTableBody">
+                    <!-- Task data will be populated here -->
+                </tbody>
+            </table>
+        </div>
+        <!-- New button for deleting selected tasks -->
+        <div class="delete-buttons" style="display: none;">
+            <button id="deleteButton" class="delete-btn"  onclick="deleteSelectedTasks()">Delete Selected Tasks</button>
+            <button id="deleteAllButton" class="delete-btn"  onclick="deleteAllTasks()">Clear Tasks</button>
+        </div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
+        crossorigin="anonymous"></script>
+    <script>
+        let deleteColumnVisible = false;
+
+        function toggleDeleteColumn() {
+            const deleteColumn = document.getElementById('deleteColumn');
+            const checkboxes = document.querySelectorAll('#tasksTableBody input[type="checkbox"]');
+            const deleteButton = document.getElementById('deleteButton');
+            const deleteAllButton = document.getElementById('deleteAllButton');
+            const deleteButtonsDiv = document.querySelector('.delete-buttons');
+        
+            deleteColumnVisible = !deleteColumnVisible;
+        
+            if (deleteColumnVisible) {
+                deleteColumn.style.display = 'table-cell';
+                checkboxes.forEach(checkbox => {
+                    checkbox.closest('td').style.display = 'table-cell';
+                });
+                deleteButtonsDiv.style.display = 'block';
+            } else {
+                deleteColumn.style.display = 'none';
+                checkboxes.forEach(checkbox => {
+                    checkbox.closest('td').style.display = 'none';
+                });
+                deleteButtonsDiv.style.display = 'none';
+            }
+        }
+
+        function deleteAllTasks() {
+            const confirmDelete = confirm('Are you sure you want to delete all tasks?');
+            if (confirmDelete) {
+                fetch('http://localhost:8090/tms/deleteAllTasks', {
+                    method: 'DELETE',
+                })
+                    .then(response => {
+                        if (response.ok) {
+                            window.location.reload();
+                        } else {
+                            throw new Error('Failed to delete all tasks');
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error deleting all tasks:', error);
+                        alert('Failed to delete all tasks. Please try again.');
+                    });
+            }
+        }
+
+        function deleteSelectedTasks() {
+            const checkboxes = document.querySelectorAll('#tasksTableBody input[type="checkbox"]');
+            const selectedTasks = [];
+        
+            checkboxes.forEach(checkbox => {
+                if (checkbox.checked) {
+                    const taskId = checkbox.parentNode.parentNode.querySelector('td:nth-child(2)').textContent;
+                    selectedTasks.push(taskId);
+                }
+            });
+        
+            if (selectedTasks.length === 0) {
+                alert('Please select at least one task to delete.');
+                return;
+            }
+        
+            const confirmDelete = confirm('Are you sure you want to delete selected tasks?');
+            if (confirmDelete) {
+                fetch('http://localhost:8090/tms/deleteTasks', {
+                    method: 'DELETE',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(selectedTasks)
+                })
+                    .then(response => {
+                        if (response.ok) {
+                            alert('Selected tasks deleted successfully!');
+                            window.location.reload();
+                        } else {
+                            throw new Error('Failed to delete selected tasks');
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error deleting tasks:', error);
+                        alert('Failed to delete selected tasks. Please try again.');
+                    });
+            }
+        }
+
+        //Get Task Details
+        fetch('http://localhost:8090/tms/tasks')
+            .then(response => response.json())
+            .then(data => {
+                const tableBody = document.getElementById('tasksTableBody');
+                data.forEach(task => {
+                    const row = document.createElement('tr');
+                    row.innerHTML = `
+                        <td style="display: none;"><input type="checkbox"></td>
+                        <td>${task.task_id}</td>
+                        <td><a href="#" onclick="redirectToTaskInfo(${task.task_id})">${task.title}</a></td>
+                        <td>${task.date_created}</td>
+                        <td>${task.due_date}</td>
+                        <td>${task.status}</td>
+                    `;
+                    tableBody.appendChild(row);
+                });
+            })
+            .catch(error => console.error('Error fetching Tasks data:', error));
+
+            function redirectToTaskInfo(taskId) {
+                window.location.href = `taskinfo.html?taskId=${taskId}` 
+            }
+    </script>
+</body>
+
+</html>

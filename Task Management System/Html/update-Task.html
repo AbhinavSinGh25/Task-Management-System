@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Update Task</title>
+<link rel="stylesheet" href="create-Task.css">
+</head>
+<body>
+    <h2>Update Task</h2>
+    <form id="taskForm">
+        <label for="title">Title:</label><br>
+        <input type="text" id="title" name="title"><br><br>
+        
+        <label for="description">Description:</label><br>
+        <textarea id="description" name="description"></textarea><br><br>
+        
+        <label for="dueDate">Due Date:</label><br>
+        <input type="date" id="due_date" name="due_date"><br><br>
+        
+        <label for="status">Status:</label><br>
+        <input type="text" id="status" name="status"><br><br>
+        
+        <input type="submit" value="Submit">
+    </form>
+
+    <script>
+        const urlParams = new URLSearchParams(window.location.search);
+        const taskId = urlParams.get('taskId');
+        
+
+                // Fetch task details based on the taskId
+                fetch(`http://localhost:8090/tms/tasks/${taskId}`)
+                .then(response => response.json())
+                .then(task => {
+                    // Populate form fields with existing task details
+                    document.getElementById('title').value = task.title;
+                    document.getElementById('description').value = task.description;
+                    document.getElementById('due_date').value = task.due_date;
+                    document.getElementById('status').value = task.status;
+                })
+                .catch(error => console.error('Error fetching task details:', error));
+
+                //Update Task Details
+                document.getElementById('taskForm').addEventListener('submit', function(event) {
+                    event.preventDefault();
+                    const formData = {
+                        title: document.getElementById('title').value,
+                        description: document.getElementById('description').value,
+                        due_date:document.getElementById('due_date').value,
+                        status:document.getElementById('status').value
+                    };
+                    console.log('Data being sent to the server:', formData);
+                    fetch(`http://localhost:8090/tms/tasks/${taskId}`, {
+                        method: 'PUT',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify(formData)
+                    })
+                    .then(response => {
+                        if (response.ok) {
+                            alert('Task updated successfully!');
+                            window.location.href = 'http://127.0.0.1:5500/homepage.html';
+                        } else {
+                            throw new Error('Failed to update task');
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error updating task:', error);
+                        alert('Failed to update task. Please try again.');
+                    });
+                }); 
+    </script>
+</body>
+</html>

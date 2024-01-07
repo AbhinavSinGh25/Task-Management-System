@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Login</title>
+    <link rel="stylesheet" href="login.css">
+</head>
+<body>
+    <div class="login-container">
+        <h2>SIGN UP</h2>
+        <form id="signupForm">
+
+            <label for="Name">Name</label><br>
+            <input type="text" id="name" name="name" required><br><br>
+            
+            <label for="email">Email</label><br>
+            <input type="text" id="email" name="email" required><br><br>
+            
+            <label for="password">Password</label><br>
+            <input type="password" id="password" name="password" required><br><br>
+            
+            <input type="submit" value="Sign Up">
+        </form>
+    </div>
+
+    <script>
+        window.onload = function() {
+            var form = document.getElementById('signupForm');
+            form.reset();
+        };
+        
+
+        document.getElementById('signupForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+            const formData = {
+                name: document.getElementById('name').value,
+                email: document.getElementById('email').value,
+                password: document.getElementById('password').value,
+            };
+            console.log('Data being sent to the server:', formData);
+            fetch('http://localhost:8090/tms/signup', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(formData)
+            })
+            .then(response => {
+                if (response.ok) {
+                    alert('User created successfully!');
+                    window.location.href = 'http://127.0.0.1:5500/login.html';
+                } else {
+                    throw new Error('Failed to create user');
+                }
+            })
+            .catch(error => {
+                console.error('Error creating user:', error);
+                alert('Failed to create user. Please try again.');
+            });
+        });
+    </script>
+
+</body>
+</html>

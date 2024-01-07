@@ -1,0 +1,106 @@
+
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f4;
+    
+    padding: 0;
+}
+
+h1 {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.table-responsive{
+    margin-top: 20px;
+}
+
+table {
+    width: 100%;
+    background-color: #fff;
+    border-collapse: collapse;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+    margin-bottom: 20px;
+}
+.container {
+    padding-top: 2em; /* Responsive space from top */
+    padding-bottom: 2em; /* Responsive space from bottom */
+}
+
+.task-heading {
+    text-align: center;
+    margin-top: 0.5em; /* Responsive space from top */
+    margin-bottom: 0.5em; /* Responsive space from bottom */
+}
+
+th,
+td {
+    padding: 12px 15px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+}
+
+th {
+    background-color: #f8f8f8;
+    font-weight: bold;
+}
+
+tbody tr:hover {
+    background-color: #f2f2f2;
+}
+
+@media (max-width: 767px) {
+    table {
+        overflow-x: auto;
+        display: block;
+    }
+}
+
+@media (max-width: 767px) {
+    .container {
+        padding-top: 1em; /* Adjusting padding for smaller screens */
+        padding-bottom: 1em; /* Adjusting padding for smaller screens */
+    }
+
+    h1 {
+        margin-top: 0.3em; /* Adjusting margin for smaller screens */
+        margin-bottom: 0.3em; /* Adjusting margin for smaller screens */
+        font-size: 1.5em; /* Adjusting font size for smaller screens */
+    }
+
+    /* Add other responsive styles for smaller screens if needed */
+}
+
+/* Individual content hover effect */
+.hover-content:hover {
+    background-color: #e6e6e6;
+    transition: background-color 0.3s ease;
+}
+
+.add-task {
+    margin-bottom: 20px;
+    text-align: left;
+}
+
+.add-task-btn {
+    background-color: #4caf50;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    font-size: 16px;
+    cursor: pointer;
+}
+.delete-btn {
+    background-color: #0eb7ff;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+.add-task-btn i {
+    margin-right: 5px;
+}
